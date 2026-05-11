@@ -1,10 +1,6 @@
 ---
 users: []
 users_default: []
-user_root:
-  - name: root
-    shell: "/bin/bash"
-    state: present
 
 # Example
 #users_default:
