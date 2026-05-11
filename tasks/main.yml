@@ -1,16 +1,23 @@
 ---
-- name: Add group for default user
+- name: Add groups for default user
   ansible.builtin.group:
     name: "{{ item.name }}"
   loop:
     "{{ users_default }}"
   tags: users
 
-- name: Add group for additional users
+- name: Add groups for additional users
   ansible.builtin.group:
     name: "{{ item.name }}"
   loop:
     "{{ users }}"
+  tags: users
+
+- name: Add additional groups
+  ansible.builtin.group:
+    name: "{{ item.name }}"
+  loop:
+    "{{ users_groups }}"
   tags: users
 
 - name: Add default user
