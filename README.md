@@ -16,6 +16,7 @@ Role Variables
 - users: []
 - users_default: []
 
+```
 # Example
  users_default:
   - name: snake
@@ -33,6 +34,7 @@ Role Variables
     state: present
     ssh_key: 
       - "ssh-rsa <...>
+```
 
 Dependencies
 ------------
