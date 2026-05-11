@@ -17,6 +17,7 @@ users_default: []
 #    shell: "/bin/bash"
 #    nopasswd: yes
 #    state: present
+#    homedir: /home/additional_user
 #    ssh_key: 
 #      - "ssh-rsa <...>"
 
