@@ -18,7 +18,7 @@
     name: "{{ item.name }}"
     group: "{{ item.name }}"
     create_home: true
-    home: "{{ item.homedir }} | default( /home/{{ item.name }} )"
+    home: "{{ item.homedir | default('/home/' + item.name) }}"
     shell: "{{ item.shell }}"
   loop: "{{ users_default }}"
   tags: users
@@ -28,7 +28,7 @@
     name: "{{ item.name }}"
     group: "{{ item.name }}"
     create_home: true
-    home: "{{ item.homedir }} | default( /home/{{ item.name }} )"
+    home: "{{ item.homedir | default('/home/' + item.name) }}"
     shell: "{{ item.shell }}"
   loop: "{{ users }}"
   tags: users
