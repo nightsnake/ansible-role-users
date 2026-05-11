@@ -1,0 +1,30 @@
+---
+users: []
+users_default: []
+user_root:
+  - name: root
+    shell: "/bin/bash"
+    state: present
+
+# Example
+#users_default:
+#  - name: snake
+#    shell: "/bin/bash"
+#    nopasswd: yes
+#    state: present
+#    ssh_key: 
+#      - "ssh-rsa <...>"
+#      - "ssh-rsa <...>"
+
+#users:
+#  - name: additional_user
+#    shell: "/bin/bash"
+#    nopasswd: yes
+#    state: present
+#    ssh_key: 
+#      - "ssh-rsa <...>"
+
+
+users_tg_notifications: false
+users_tg_token: "your_tg_bot_token"
+users_tg_group: "your_group_id or name"

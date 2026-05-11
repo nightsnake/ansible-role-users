@@ -1,0 +1,76 @@
+---
+- name: Add group for default user
+  ansible.builtin.group:
+    name: "{{ item.name }}"
+  loop:
+    "{{ users_default }}"
+  tags: users
+
+- name: Add group for additional users
+  ansible.builtin.group:
+    name: "{{ item.name }}"
+  loop:
+    "{{ users }}"
+  tags: users
+
+- name: Add default user
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    group: "{{ item.name }}"
+    create_home: true
+    home: "/home/{{ item.name }}"
+    shell: "{{ item.shell }}"
+  loop: "{{ users_default }}"
+  tags: users
+
+- name: Add additional users
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    group: "{{ item.name }}"
+    create_home: true
+    home: "/home/{{ item.name }}"
+    shell: "{{ item.shell }}"
+  loop: "{{ users }}"
+  tags: users
+
+- name: Set ssh key for users
+  ansible.posix.authorized_key:
+    user: "{{ item.0.name }}"
+    state: present
+    key: "{{ item.1 }}"
+  loop:
+    "{{ users_default | subelements('ssh_key') }}"
+
+  when: item.0.ssh_key is defined
+  tags: users
+
+- name: Set ssh key for additional users
+  ansible.posix.authorized_key:
+    user: "{{ item.0.name }}"
+    state: present
+    key: "{{ item.1 }}"
+  loop:
+    "{{ users | subelements('ssh_key') }}"
+
+  when: item.0.ssh_key is defined
+  tags: users
+
+- name: Enable telegram notification about login
+  ansible.builtin.template:
+    src: tg-send.sh.j2
+    dest: /usr/bin/tg-send.sh
+    owner: root
+    group: root
+    mode: '0755'
+  tags: users
+  when: users_tg_notifications is true
+
+- name: Enable telegram notification about login
+  ansible.builtin.copy:
+    src: login-notify.sh
+    dest: /etc/profile.d/login-notify.sh
+    owner: root
+    group: root
+    mode: '0755'
+  tags: users
+  when: users_tg_notifications is true
