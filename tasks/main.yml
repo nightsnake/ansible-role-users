@@ -27,6 +27,8 @@
     create_home: true
     home: "{{ item.homedir | default('/home/' + item.name) }}"
     shell: "{{ item.shell }}"
+    append: "{{ item.append | default(false) }}"
+    groups: "{{ item.groups | default(omit) }}"
   loop: "{{ users_default }}"
   tags: users
 
@@ -37,6 +39,8 @@
     create_home: true
     home: "{{ item.homedir | default('/home/' + item.name) }}"
     shell: "{{ item.shell }}"
+    append: "{{ item.append | default(false) }}"
+    groups: "{{ item.groups | default(omit) }}"    
   loop: "{{ users }}"
   tags: users
 
