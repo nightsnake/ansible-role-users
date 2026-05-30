@@ -1,5 +1,5 @@
 ---
-- name: Add groups for default user
+- name: Add groups for default users
   ansible.builtin.group:
     name: "{{ item.name }}"
   loop:
@@ -24,11 +24,14 @@
   ansible.builtin.user:
     name: "{{ item.name }}"
     group: "{{ item.name }}"
-    create_home: true
+    create_home: "{{ item.create_home | default(true) }}"
     home: "{{ item.homedir | default('/home/' + item.name) }}"
     shell: "{{ item.shell }}"
     append: "{{ item.append | default(false) }}"
     groups: "{{ item.groups | default(omit) }}"
+    force: "{{ item.force | default(omit) }}"
+    remove: "{{ item.remove | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
   loop: "{{ users_default }}"
   tags: users
 
@@ -36,18 +39,21 @@
   ansible.builtin.user:
     name: "{{ item.name }}"
     group: "{{ item.name }}"
-    create_home: true
+    create_home: "{{ item.create_home | default(true) }}"
     home: "{{ item.homedir | default('/home/' + item.name) }}"
     shell: "{{ item.shell }}"
     append: "{{ item.append | default(false) }}"
     groups: "{{ item.groups | default(omit) }}"    
+    force: "{{ item.force | default(omit) }}"
+    remove: "{{ item.remove | default(omit) }}"
+    state: "{{ item.state | default('present') }}"    
   loop: "{{ users }}"
   tags: users
 
 - name: Set ssh key for users
   ansible.posix.authorized_key:
     user: "{{ item.0.name }}"
-    state: present
+    #state: "{{ item.0.state | default('present') }}" #will heritate status from user
     key: "{{ item.1 }}"
   loop:
     "{{ users_default | subelements('ssh_key') }}"
@@ -58,10 +64,10 @@
 - name: Set ssh key for additional users
   ansible.posix.authorized_key:
     user: "{{ item.0.name }}"
-    state: present
+    #state: "{{ item.0.state | default('present') }}" #will heritate status from user
     key: "{{ item.1 }}"
   loop:
-    "{{ users | subelements('ssh_key') }}"
+    "{{ users | subelements('ssh_key', state=present) }}"
 
   when: item.0.ssh_key is defined
   tags: users
