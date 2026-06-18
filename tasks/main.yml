@@ -67,7 +67,7 @@
     #state: "{{ item.0.state | default('present') }}" #will heritate status from user
     key: "{{ item.1 }}"
   loop:
-    "{{ users | subelements('ssh_key', state=present) }}"
+    "{{ users | subelements('ssh_key') }}"
 
   when: item.0.ssh_key is defined
   tags: users
