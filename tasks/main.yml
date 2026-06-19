@@ -72,6 +72,14 @@
   when: item.0.ssh_key is defined
   tags: users
 
+- name: Remove users
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    remove: true
+    state: absent
+  loop: "{{ removed }}"
+  tags: users
+
 - name: Enable telegram notification about login
   ansible.builtin.template:
     src: tg-send.sh.j2
